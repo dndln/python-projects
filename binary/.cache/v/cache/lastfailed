@@ -1,1 +1,4 @@
-{}
+{
+  "test_size_binary.py": true,
+  "tests/test_binary.py": true
+}

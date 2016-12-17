@@ -42,7 +42,7 @@ class Binary:
     def __lshift__(self, pos):
         return Binary(self._value << pos)
 
-    def __rshift(self, pos):
+    def __rshift__(self, pos):
         return Binary(self._value >> pos)
 
     def __add__(self, other):
