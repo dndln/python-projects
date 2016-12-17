@@ -55,6 +55,8 @@ def test_binary_bin():
     binary = Binary(6)
     assert bin(binary) == '0b110'
 
+## Basic Operations
+
 def test_binary_addition_int():
     assert Binary(4) + 1 == Binary(5)
 
@@ -85,4 +87,25 @@ def test_binary_sh1_pos():
 def test_binary_slice():
     assert Binary('01101010')[0:3] == Binary('10')
     assert Binary('01101010')[1:4] == Binary('101')
-    assert Bianry('01101010')[4:] == Binary('110')
+    assert Binary('01101010')[4:] == Binary('110')
+
+def test_binary_illegal_index():
+    with pytest.raises(IndexError):
+        Binary('01101010')[7]
+
+def test_binary_negative_index():
+    assert Binary('0101110001')[-1] == '1'
+    assert Binary('0101110001')[-2] == '0'
+
+def test_binary_inappropriate_type_index():
+    with pytest.raises(TypeError):
+        Binary('01101010')['key']
+
+def test_binary_for_loop():
+    assert [int(i) for i in Binary('01101010')] == [0, 1, 0, 1, 0, 1, 1]
+
+def test_binary_not():
+    assert ~Binary('1101') == Binary('10')
+
+def test_binary_and():
+    assert Binary('1101') & Binary('1') == Binary('1')
