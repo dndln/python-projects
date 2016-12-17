@@ -54,3 +54,35 @@ def test_binary_hex():
 def test_binary_bin():
     binary = Binary(6)
     assert bin(binary) == '0b110'
+
+def test_binary_addition_int():
+    assert Binary(4) + 1 == Binary(5)
+
+def test_binary_addition_binary():
+    assert Binary(4) + Binary(5) == Binary(9)
+
+def test_binary_division_int():
+    assert Binary(20) / 4 == Binary(5)
+
+def test_bianry_division_rem_int():
+    assert Binary(21) / 4 == Binary(5)
+
+def test_binary_get_bit():
+    binary = Binary('0101110001')
+    assert binary[0] == '1'
+    assert binary[5] == '1'
+    assert binary[7] == '0'
+
+def test_binary_not():
+    assert ~Binary('1101') == Binary('10')
+
+def test_binary_and():
+    assert Binary('1101') & Binary('1') == Binary('1')
+
+def test_binary_sh1_pos():
+    assert Binary('1101') << 5 == Binary('110100000')
+
+def test_binary_slice():
+    assert Binary('01101010')[0:3] == Binary('10')
+    assert Binary('01101010')[1:4] == Binary('101')
+    assert Bianry('01101010')[4:] == Binary('110')
