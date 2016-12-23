@@ -1,0 +1,7 @@
+INFO:root:Informational message
+ERROR:root:An error has happened!
+ERROR:ex:Error!
+Traceback (most recent call last):
+  File "python101.py", line 401, in <module>
+    raise RuntimeError
+RuntimeError

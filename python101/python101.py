@@ -241,6 +241,211 @@
 #     path = 'dict_output.csv'
 #     csv_dict_writer(path, fieldnames, my_list)
 
-import configparser
+# import configparser
+#
+# def createConfig(path):
+#     """
+#     Crate a config file
+#     """
+#     config = configparser.ConfigParser()
+#     config.add_section('Settings')
+#     config.set('Settings', 'font', 'Courier')
+#     config.set('Settings', 'font_size', '10')
+#     config.set('Settings', 'font_style', 'Normal')
+#     config.set('Settings', 'font_info',
+#         # 'You are using {0} at {1} pt'.format(font, font_size)) # this line doesn't work
+#         'You are using %(font)s at %(font_size)s pt')
+#
+#     with open(path, 'w') as config_file:
+#         config.write(config_file)
+#
+# if __name__ == '__main__':
+#     path = 'settings.ini'
+#     createConfig(path)
 
-def
+# import configparser
+# import os
+# import ipdb
+#
+# def crud_config(path):
+#     """
+#     Create, read, update, delete config
+#     """
+#     if not os.path.exists(path):
+#         createConfig(path)
+#
+#     config = configparser.ConfigParser()
+#     config.read(path)
+#
+#     # read some values from the config
+#     font = config.get('Settings', 'font')
+#     font_size = config.get('Settings', 'font_size')
+#
+#     # change a value in the config
+#     config.set('Settings', 'font_size', '12')
+#
+#     # delete a value from the config
+#     config.remove_option('Settings', 'font_style')
+#
+#     # write changes back to config file
+#     with open(path, 'w') as config_file:
+#         config.write(config_file)
+#
+# if __name__ == '__main__':
+#     path = 'settings.ini'
+#     crud_config(path)
+
+# import configparser
+# import os
+#
+# def create_config(path):
+#     """
+#     Create a config file
+#     """
+#     config = configparser.ConfigParser()
+#     config.add_section('Settings')
+#     config.set('Settings', 'font', 'Courier')
+#     config.set('Settings', 'font_style', 'Normal')
+#     config.set('Settings', 'font_size', '10')
+#     # this doesn't work
+#     # config.set('Settings', 'font_info',
+#     #     'You are using {} at {} pt.format(font, font_size)')
+#     config.set('Settings', 'font_info',
+#         'You are using %(font)s at %(font_size)s pt')
+#
+#
+#     with open(path, 'w') as config_file:
+#         config.write(config_file)
+#
+# def get_config(path):
+#     """
+#     Returns the config object
+#     """
+#     if not os.path.exists(path):
+#         create_config(path)
+#
+#     config = configparser.ConfigParser()
+#     config.read(path)
+#     return config
+#
+# def get_setting(path, section, setting):
+#     """
+#     Print out a setting
+#     """
+#     config = get_config(path)
+#     value = config.get(section, setting)
+#     msg = '{section} {setting} is {value}'.format(
+#         section=section, setting=setting, value=value)
+#     print(msg)
+#     return value
+#
+# def update_setting(path, section, setting, value):
+#     """
+#     Update a setting
+#     """
+#     config = get_config(path)
+#     config.set(section, setting, value)
+#     with open(path, 'w') as config_file:
+#         config.write(config_file)
+#
+# def delete_setting(path, section, setting):
+#     """
+#     Delete a setting
+#     """
+#     config = get_config(path)
+#     config.remove_option(section, setting)
+#     with open(path, 'w') as config_file:
+#         config.write(config_file)
+#
+# if __name__ == '__main__':
+#     path = 'settings.ini'
+#     font = get_setting(path, 'Settings', 'font')
+#     font_size = get_setting(path, 'Settings', 'font_size')
+#     font_info = get_setting(path, 'Settings', 'font_info')
+#     update_setting(path, 'Settings', 'font_size', '12')
+#     delete_setting(path, 'Settings', 'font_style')
+
+# import configparser
+# import os
+#
+# def interpolation_demo(path):
+#     if not os.path.exists(path):
+#         create_config(path)
+#
+#     config = configparser.ConfigParser()
+#     config.read(path)
+#
+#     print(config.get('Settings', 'font_info'))
+#     print(config.get('Settings', 'font_info', vars={'font':'Arial', 'font_size':'100'}))
+#
+# if __name__ == '__main__':
+#     path = 'settings.ini'
+#     interpolation_demo(path)
+
+# import logging
+#
+# # add filemode='w' to overwrite the log file instead of appending
+# logging.basicConfig(filename='sample.log', level=logging.INFO)
+#
+# logging.debug('This is a debug message')
+# logging.info('Informational message')
+# logging.error('An error has happened!')
+
+# import logging
+#
+# logging.basicConfig(filename='sample.log', level=logging.INFO)
+# # use .getLogger to return a logger object names 'ex'
+# log = logging.getLogger('ex')
+#
+# try:
+#     raise RuntimeError
+# except RuntimeError:
+#     log.exception('Error!')
+# # output:
+# # ERROR:ex:Error!
+# # Traceback (most recent call last):
+# #   File "python101.py", line 401, in <module>
+# #     raise RuntimeError
+# # RuntimeError
+
+# import logging
+# import otherMod
+#
+# def main():
+#     """
+#     The main entry point of the application
+#     """
+#     logging.basicConfig(filename='mySnake.log', level=logging.INFO)
+#     logging.info('Program started')
+#     result = otherMod.add(7, 8)
+#     logging.info('Done!')
+#
+# if __name__ == '__main__':
+#     main()
+
+import logging
+import otherMod2
+
+def main():
+    """
+    The main entry point of the application
+    """
+    logger = logging.getLogger('exampleApp')
+    logger.setLevel(logging.INFO)
+
+    # create the logging file handler
+    fh = logging.FileHandler('new_snake.log')
+
+    formatter = logging.Formatter('''%(asctime)s - %(name)s - %(levelname)s -
+        %(message)s''')
+    fh.setFormatter(formatter)
+
+    # add handler to logger object
+    logger.addHandler(fh)
+
+    logger.info('Program started')
+    result = otherMod2.add(7, 8)
+    logger.info('Done!')
+
+if __name__ == '__main__':
+    main()
