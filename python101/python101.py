@@ -1247,8 +1247,9 @@
 
 # # sharing files with python
 # # cd into the directory
-# python -m SimpleHTTPServer 8000 # can use pretty much any port, like 8080
+# python -m SimpleHTTPServer 8000 # can use pretty much any port, like 8080 # Python 2 only
 # # To access the shared files go to http://your_ip_address:8000.
+# # python -m http.server 8000 # couldn't get this to work
 
 # # running tests with "python python101.py"
 # def double(a):
