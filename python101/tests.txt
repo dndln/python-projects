@@ -1,0 +1,7 @@
+The following are tests for python101.py
+
+>>> from python101 import double
+>>> double(4)
+8
+>>> double(9)
+18
