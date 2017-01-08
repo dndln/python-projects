@@ -764,3 +764,152 @@
 #     add(1, 2)
 #     add('1', '2')
 #     add([1], [2])
+
+# # "any" accepts an iterable and returns true if any elemnt in iterable is True
+# print(any([0,0,0,1])) # True
+# # "all" returns true if they're all true
+# print(all([0,0,1])) # False
+# print(all([1,1,1])) # True
+# # testing whether a list of widgets are shown when they shouldnt be:
+# widget_one = ''
+# widget_two = ''
+# widget_three = 'button'
+# widgets_exist = any([widget_one, widget_two, widget_three])
+# if widgets_exist:
+#     raise Exception
+
+# # enumerate shows the index position and the element
+# my_string = 'abcdefg'
+# for pos, letter in enumerate(my_string):
+#     print(pos, letter)
+
+# # eval takes a string and basically runs them
+# var = 10
+# source = 'var * 2'
+# print(eval(source)) # 20
+
+# # filter takes a function and an iterable and returns an iterator for those
+# # elements within the iterable for which the passed in function returns True.
+# def less_than_10(x):
+#     return x < 10 # Returns True if x < 10, False otherwise
+#
+# my_list = [1, 2, 3, 10, 11, 12]
+# filtered_iterable = filter(less_than_10, my_list) # Iterable with 1, 2, 3 in it
+# for item in filtered_iterable:
+#     print(item)
+# # itertools also has "filterfalse", whic returns an iterable where the function
+# # returns False
+
+# # map takes a function and an iterable, and returns an iterator that applies
+# # the function to each item in the iterable
+#
+# def doubler(x):
+#     return x * 2
+#
+# my_list = [1, 2, 3, 4, 5]
+# map_iterator = map(doubler, my_list) # Iterator holding 2, 4, 6, 8, 10 # also a generator
+# for item in map_iterator:
+#     print(item)
+
+# # zip takes a series of iterables and returns an iterator of tuples
+# keys = ['a', 'b', 'c']
+# values = [5, 6, 7]
+# zip_iterator = zip(keys, values)
+# print(zip_iterator)
+# # print(list(zip_iterator))
+# print(dict(zip_iterator))
+
+# # unicode
+# string = 'abc' + chr(255)
+# print(string)
+# u = chr(40960) + 'abc' + chr(1972)
+# print(u)
+# print(u.encode('ascii', 'ignore'))
+# print(u.encode('ascii', 'replace'))
+
+# # benchmarking
+# def my_function():
+#     try:
+#         1 / 0
+#     except ZeroDivisionError:
+#         pass
+#
+# if __name__ == '__main__':
+#     import timeit
+#     setup = 'from __main__ import my_function'
+#     print(timeit.timeit('my_function()', setup=setup))
+
+# # creating a function decorator for timing
+# import random
+# import time
+#
+# def timerfunc(func):
+#     """
+#     A timer decorator
+#     """
+#
+#     def function_timer(*args, **kwargs):
+#         """
+#         A nested function for timing other functions
+#         """
+#         start = time.time()
+#         value = func(*args, **kwargs) # runs the passed function
+#         end = time.time()
+#         runtime = end - start
+#         msg = "The runtime for {func} took {time} seconds to complete"
+#         print(msg.format(func=func.__name__, time=runtime))
+#         return value
+#
+#     return function_timer
+#
+# @timerfunc
+# def long_runner():
+#     for x in range(5):
+#         sleep_time = random.choice(range(1,5))
+#         time.sleep(sleep_time)
+#
+# if __name__ == '__main__':
+#     long_runner()
+
+# # creating a timing "context manager class"
+# import random
+# import time
+#
+# class MyTimer():
+#
+#     def __init__(self):
+#         self.start = time.time()
+#
+#     def __enter__(self):
+#         return self
+#
+#     def __exit__(self, exc_type, exc_val, exc_tb):
+#         end = time.time()
+#         runtime = end - self.start
+#         msg = 'The function took {time} seconds to complete'
+#         print(msg.format(time=runtime))
+#
+# def long_runner():
+#     for x in range(5):
+#         sleep_time = random.choice(range(1,5))
+#         time.sleep(sleep_time)
+#
+# if __name__ == '__main__':
+#     with MyTimer():
+#         long_runner()
+
+# import cProfile
+#
+# cProfile.run('[x for x in range(1500)]')
+# # python -m cProfile test.py
+
+# # run with python -m memory_profiler python201.py
+# @profile
+# def mem_func():
+#     lots_of_numbers = list(range(1500))
+#     x = ['letters'] * (5 ** 10)
+#     del lots_of_numbers
+#     return None
+#
+# if __name__ == '__main__':
+#     mem_func()
