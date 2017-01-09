@@ -913,3 +913,46 @@
 #
 # if __name__ == '__main__':
 #     mem_func()
+
+# # hashing
+# import hashlib
+#
+# md5 = hashlib.md5() # create an instance of an md5 as object
+# md5.update(b'Python rocks!') # Must encode unicode objects into bytes
+# print(md5.digest())
+# print(md5.hexdigest())
+# sha = hashlib.sha1(b'Hello Python').hexdigest()
+# print(sha)
+
+# # salting
+# # use bcrypt or scrypt for real world applications
+# import hashlib
+# import binascii
+#
+# dk = hashlib.pbkdf2_hmac(hash_name='sha256',
+#     password=b'bad_password34',
+#     salt=b'bad_salt',
+#     iterations=100000)
+# print(binascii.hexlify(dk))
+
+# # conda install pycrypto
+# from Crypto.PublicKey import RSA
+# code = 'nooneknows'
+# key = RSA.generate(2048)
+# encrypted_key = key.exportKey(passphrase=code, pkcs=8)
+# with open('/home/andy/Desktop/my_private_rsa_key.bin', 'wb') as f:
+#     f.write(encrypted_key)
+# with open('/home/andy/Desktop/my_public_rsa_key.pem', 'wb') as f:
+#     f.write(key.publickey().exportKey())
+
+# # conda install cryptography
+# from cryptography.fernet import Fernet
+# cipher_key = Fernet.generate_key()
+# print(cipher_key)
+# cipher = Fernet(cipher_key)
+# text = b'My super secret message'
+# print(text)
+# encrypted_text = cipher.encrypt(text)
+# print(encrypted_text)
+# decrypted_text = cipher.decrypt(encrypted_text)
+# print(decrypted_text)
