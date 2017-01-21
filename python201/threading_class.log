@@ -1,0 +1,30 @@
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+%(asctime)s - %(threadName)s - %(levelname)s - %(message)s
+2017-01-16 20:57:30,434 - Mike - DEBUG - Calling doubler
+2017-01-16 20:57:30,435 - George - DEBUG - Calling doubler
+2017-01-16 20:57:30,435 - Wanda - DEBUG - Calling doubler
+2017-01-16 20:57:30,435 - Dingbat - DEBUG - Calling doubler
+2017-01-16 20:57:30,435 - Nina - DEBUG - Calling doubler
+2017-01-16 20:57:30,444 - Mike - DEBUG - doubler function executing
+2017-01-16 20:57:30,444 - George - DEBUG - doubler function executing
+2017-01-16 20:57:30,444 - Wanda - DEBUG - doubler function executing
+2017-01-16 20:57:30,446 - Wanda - DEBUG - doubler function ended with: 4
+2017-01-16 20:57:30,445 - Nina - DEBUG - doubler function executing
+2017-01-16 20:57:30,446 - Nina - DEBUG - doubler function ended with: 8
+2017-01-16 20:57:30,445 - George - DEBUG - doubler function ended with: 2
+2017-01-16 20:57:30,444 - Dingbat - DEBUG - doubler function executing
+2017-01-16 20:57:30,447 - Dingbat - DEBUG - doubler function ended with: 6
+2017-01-16 20:57:30,445 - Mike - DEBUG - doubler function ended with: 0

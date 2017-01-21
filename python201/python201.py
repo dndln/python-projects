@@ -956,3 +956,928 @@
 # print(encrypted_text)
 # decrypted_text = cipher.decrypt(encrypted_text)
 # print(decrypted_text)
+
+# # super
+# class MtParentClass():
+#     def __init__(self, x, y):
+#         pass
+#
+# class SubClass(MyParentClass):
+#     def __init__(self, x, y):
+#         super().__init__(x, y)
+
+# # Method Resolution order (which parent method is called first?)
+# class X:
+#     def __init_(self):
+#         print('X')
+#         super().__init__()
+#
+# class Y:
+#     def __init_(self):
+#         print('Y')
+#         super().__init__()
+#
+# class Z(X, Y):
+#     pass
+#
+# z = Z()
+# print(Z.__mro__)
+# # (<class '__main__.Z'>, <class '__main__.X'>, <class '__main__.Y'>, <class 'object'>)
+# # 'X' and 'Y' are not printed though?
+
+# class Base:
+#     var = 5
+#     def __init__(self):
+#         pass
+#
+# class X(Base):
+#     def __init__(self):
+#         print('X')
+#         super().__init__()
+#
+# class Y(Base):
+#     var = 10
+#     def __init__(self):
+#         print('Y')
+#         super().__init__()
+#
+# class Z(X, Y):
+#     pass
+#
+# z = Z()
+# print(Z.__mro__)
+# print(super(Z, z).var) # checks if var is defined in X, then Y, the Base, then object.
+# # the order it checks is the "method resolution order".
+
+# # descriptors
+# class MyDescriptor():
+#     """
+#     A simple demo desciptor
+#     """
+#     def __init__(self, initial_value=None, name='my_var'):
+#         self.var_name = name
+#         self.value = initial_value
+#
+#     def __get__(self, obj, objtype):
+#         print('Getting', self.var_name)
+#         return self.value
+#
+#     def __set__(self, obj, value):
+#         msg = 'Setting {name} to {value}'
+#         print(msg.format(name=self.var_name, value=value))
+#         self.value = value
+#
+# class MyClass():
+#     desc = MyDescriptor(initial_value='Mike', name='desc')
+#     normal = 10
+#
+# if __name__ == '__main__':
+#     c = MyClass()
+#     print(c.desc)
+#     print(c.normal)
+#     c.desc = 100
+#     print(c.desc)
+
+# # using a descriptor to do validation
+# from weakref import WeakKeyDictionary
+#
+# class Drinker:
+#     def __init__(self):
+#         self.req_age = 21
+#         self.age = WeakKeyDictionary()
+#
+#     def __get__(self, instance_obj, objtype):
+#         return self.age.get(instance_obj, self.req_age)
+#
+#     def __set__(self, instance, new_age):
+#         if new_age < 21:
+#             msg = '{name} is too young to legally imbibe'
+#             raise Exception(msg.format(name=instance.name))
+#         self.age[instance] = new_age
+#         print('{name} can legally drink in the USA'.format(name=instance.name))
+#
+#     def __delete__(self, instance):
+#         del self.age[instance]
+#
+# class Person:
+#     drinker_age = Drinker()
+#
+#     def __init__(self, name, age):
+#         self.name = name
+#         self.drinker_age = age
+#
+# p = Person('Miguel', 30)
+# p = Person('Niki', 13)
+
+# # local scope assignment
+# x = 10
+# def my_func(a, b):
+#     print(x)
+#     print(z)
+#
+# my_func(1, 2)
+# # 'z' is not defined
+
+# def my_func(a, b):
+#     x = 5
+#     print(x)
+#
+# if __name__ == '__main__':
+#     x = 10
+#     my_func(1, 2) # prints 5
+#     print(x) # prints 10
+
+# def func():
+#     global x
+#     print(x)
+#     x = 5
+#     print(x)
+#
+# if __name__ == '__main__':
+#     x = 10
+#     func() # prints 10 and 5
+#     print(x) # x is still 5 outside the function -> don't modify globals inside a function
+
+# # nonlocal scope - allows you to assign variables to outer scopes, but not global scope
+# def counter():
+#     num = 0
+#     def incrementer():
+#         nonlocal num
+#         num += 1
+#         return num
+#     return incrementer
+#
+# c = counter()
+# print(c)
+# print(c())
+# print(c())
+# print(c())
+# print(c())
+
+# # Web Scraping
+# # scraping a blog:
+# # right click and inspect element on what you want to scrape
+# import requests
+# from bs4 import BeautifulSoup
+# import pprint
+# import ipdb
+#
+# url = 'http://blog.pythonlibrary.org/'
+#
+# def get_articles():
+#     """
+#     Get the articles from the front page of the blog
+#     """
+#     req = requests.get(url)
+#     html = req.text # pull the html out as a string using the 'text' property
+#     # soup and pages are iterable
+#     soup = BeautifulSoup(html, 'html.parser') # turns the long html string into an object
+#     pages = soup.findAll('h1') # get all the <h1> headers
+#
+#     # dictionary comprehension to extract href (url) and text (title)
+#     articles = {i.a['href']: i.text.strip() for i in pages if i.a}
+#     for article in articles:
+#         s = '{title}: {url}'.format(
+#             title=articles[article],
+#             url=article)
+#         pprint.pprint(s)
+#
+#     return articles
+#
+# if __name__ == '__main__':
+#     articles = get_articles()
+
+# # scraping twitter
+# # inspect element shows we need the 'li' tag and the 'js-stream-item' class
+# # written on 20170114, may be out of date (had to edit the code in the textbook)
+# import requests
+# from bs4 import BeautifulSoup
+# import ipdb
+#
+# url = 'https://twitter.com/mousevspython'
+# req = requests.get(url)
+# html = req.text
+# soup = BeautifulSoup(html, 'html.parser')
+# tweets = soup.findAll('li', 'js-stream-item') # found by 'inspecting element' in browser
+# for item in range(len(soup.find_all('p', 'TweetTextSize'))):
+#     # <p class="TweetTextSize TweetTextSize--26px js-tweet-text tweet-text" data-aria-label-part="0" lang="en">
+#     # can use .text instead of .get_text()
+#     tweet_text = tweets[item].find('p').get_text() # only 1 'p' in each tweet
+#     print(tweet_text)
+#     dt = tweets[item].find('a', 'tweet-timestamp')
+#     timestamp = dt['title']
+#     print('This was tweeted on ' + timestamp)
+
+# # Writing a web crawler
+# # "conda install scrapy"
+# # 'scrapy startproject blog_scrapter' in bash
+# # look in 'blog_scraper/blog_scraper/items.py' and 'blog_scraper/blog_scraper/spiders/blog.py'
+# # cd blog_scraper
+# # scrapy crawl mouse
+# # scrapy crawl mouse -o articles.csv -t csv
+
+# # Web APIs
+# # Python wrapper for the Twitter API
+# # pip install tweepy
+# import tweepy
+#
+# key = 'random_key'
+# secret = 'random_secret'
+# access_token = 'access_token'
+# access_secret = 'super_secret'
+#
+# auth = tweepy.OAuthHandler(key, secret) # create authentication handler
+# auth.set_access_token(access_token, access_secret) # set access token
+# api = tweepy.API(auth) # create a Twitter API object
+#
+# my_tweets = api.user_timeline()
+# for tweet in my_tweets:
+#     print(tweet.text)
+#
+# # updating status with api
+# api.update_status('I just tweeted using Python')
+# api.update_with_media(filename, 'I can tweet files with Python')
+
+# # reddit
+# # pip install praw (Python Reddit Api Wrapper)
+# # requires client_id, so the following is untested
+# import praw
+#
+# red = praw.Reddit(user_agent='pyred')
+# red.get_top()
+# print(red.get_top())
+# for i in red.get_top():
+#     print(i)
+#
+# python = red.getsubreddit('python')
+# submissions = python.get_hot(limit=5)
+# print(submissions)
+# for submission in submissions:
+#     print(submission)
+#
+# id = '4q21xb'
+# submission = red.get_submission(submission_id=id)
+# comments = submission.comments
+# print(comments)
+# print(comments[0].author)
+# print(comments[0].body)
+
+# # Wikipedia
+# # pip install wikipedia
+# import wikipedia
+#
+# print(wikipedia.search('Python'))
+# print(wikipedia.summary('Python (programming language)'))
+
+# import wikipedia
+#
+# def print_wikipedia_results(word):
+#     """
+#     Searches for pages that match the specified word
+#     """
+#     results = wikipedia.search(word)
+#
+#     for result in results:
+#         # ipdb.set_trace()
+#         try:
+#             page = wikipedia.page(result)
+#         except wikipedia.exceptions.DisambiguationError:
+#             print('DisambiguationError')
+#             continue
+#         except wikipedia.exceptions.PageError:
+#             print('PageError for result: ' + result)
+#             continue
+#
+#         print(page.summary)
+#
+# if __name__ == '__main__':
+#     print_wikipedia_results('wombat')
+
+# # working with FTP
+# from ftplib import FTP
+# ftp = FTP('ftp.cse.buffalo.edu') # create an instance of FTP by passing url
+# print(ftp.login())
+#
+# # connecting with non-standard port
+# from ftplib import FTP
+# ftp = FTP()
+# HOST = 'ftp.cse.buffalo.edu'
+# PORT = 12345
+# ftp.connect(HOST, PORT)
+
+# # downloading a file from FTP server
+# from ftplib import FTP
+# ftp = FTP('ftp.debian.org')
+# ftp.login()
+# ftp.cwd('debian') # same thing as cd
+# out = '/home/andy/Desktop/README'
+# with open(out, 'wb') as f:
+#     ftp.retrbinary('RETR ' + 'README.html', f.write)
+
+# # download all the file with a file listing
+# # need to 'mkdir /home/andy/Desktop/ftp_test'
+# import ftplib
+# import os
+#
+# ftp = ftplib.FTP('ftp.debian.org')
+# ftp.login()
+# ftp.cwd('debian')
+# filenames = ftp.nlst() # get a list of directory
+#
+# for filename in filenames:
+#     host_file = os.path.join('/home/andy/Desktop/ftp_test', filename)
+#     try:
+#         with open(host_file, 'wb') as local_file:
+#             ftp.retrbinary('RETR ' + filename, local_file.write)
+#     except ftplib.error_perm:
+#         pass
+#
+# ftp.quit()
+
+# # uploading files to FTP
+# # storlines -> text files
+# # storbinary -> binary files
+# import ftplib
+#
+# def ftp_upload(ftp_obj, path, ftype='TXT'):
+#     """
+#     A function for uploading files to an FTP server
+#     """
+#     if ftype='TXT':
+#         with open(path) as fobj:
+#             ftp.storlines('STOR ' + path, fobj)
+#     else:
+#         with open(path, 'rb') as fobj:
+#             ftp.storbinary('STOR ' + path, fobj, 1024)
+#
+# if __name__ == '__main__':
+#     ftp = ftplib.FTP('host', 'username', 'password')
+#     ftp.login()
+#
+#     path = '/path/to/something.txt'
+#     ftp.upload(ftp, path)
+#
+#     pdf_path = '/path/to/something.pdf'
+#     ftp_upload(ftp, pdf_path, ftype='PDF')
+#
+#     ftp.quit()
+
+# # urllib (lower level than requests)
+# import urllib.request
+#
+# url = urllib.request.urlopen('https://www.google.com/')
+# print(url.geturl())
+# header = url.info()
+# print(header.as_string())
+# print(url.read())
+
+# import urllib.request
+# url = 'http://www.blog.pythonlibrary.org/wp-content/uploads/2012/06/wxDbView\
+# er.zip'
+# response = urllib.request.urlopen(url)
+# data = response.read()
+# with open('/home/andy/Desktop/test.zip', 'wb') as fobj:
+#     fobj.write(data)
+
+# # parsing url strings
+# from urllib.parse import urlparse
+#
+# result = urlparse('https://duckduckgo.com/?q=python+stubbing&t=canonical&ia=\
+# qa')
+# print(result)
+# print(result.netloc)
+# print(result.geturl())
+# print(result.port)
+
+# # submitting a web form
+# import urllib.request
+# import urllib.parse
+#
+# data = urllib.parse.urlencode({'q': 'Python'})
+# print(data)
+# url = 'http://duckduckgo.com/html/'
+# full_url = url + '?' + data
+# response = urllib.request.urlopen(full_url)
+# with open('/home/andy/Desktop/results.html', 'wb') as f:
+#     f.write(response.read())
+
+# # reading robots.txt
+# import urllib.robotparser
+#
+# robot = urllib.robotparser.RobotFileParser()
+# robot.set_url('http://arstechnica.com/robots/txt')
+# robot.read()
+# print(robot.can_fetch('*', 'http://arstechnica.com/'))
+# print(robot.can_fetch('*', 'http://arstechnica.com/cgi-bin/'))
+
+# # coverage run test_mymath.py
+# # coverage report -m
+# # coverage html
+
+# Concurrency
+# asyncio, threading, multiprocessing, concurrent.futures
+
+# # a bad coroutine example
+# import asyncio
+# import os
+# import urllib.request # urllib is not asynchronous
+#
+# # this function is a coroutine, but isn't asynchronous
+# async def download_coroutine(url):
+#     """
+#     A coroutine to download the specified url
+#     """
+#     request = urllib.request.urlopen(url)
+#     filename = os.path.basename(url)
+#
+#     with open(filename, 'wb') as file_handle:
+#         while True:
+#             chunk = request.read(1024)
+#             if not chunk:
+#                 break
+#             file_handle.write(chunk)
+#     msg = 'Finished downloading {filename}'.format(filename=filename)
+#     return msg
+#
+# async def main(urls):
+#     """
+#     Creates a group of coroutines and waits for them to finish
+#     """
+#     coroutines = [download_coroutine(url) for url in urls]
+#     completed, pending = await asyncio.wait(coroutines)
+#     for item in completed:
+#         print(item.result())
+#
+# if __name__ == '__main__':
+#     urls = ['http://www.irs.gov/pub/irs-pdf/f1040.pdf',
+#         'http://www.irs.gov/pub/irs-pdf/f1040a.pdf',
+#         'http://www.irs.gov/pub/irs-pdf/f1040ez.pdf',
+#         'http://www.irs.gov/pub/irs-pdf/f1040es.pdf',
+#         'http://www.irs.gov/pub/irs-pdf/f1040sb.pdf']
+#
+#     event_loop = asyncio.get_event_loop()
+#     try:
+#         event_loop.run_until_complete(main(urls)) # run the main coroutine, which
+#         # runs the download_coroutine coroutine (chained coroutine)
+#     finally:
+#         event_loop.close()
+
+# # better coroutine example
+# # pip install aiohttp
+# import aiohttp
+# import asyncio
+# import async_timeout
+# import os
+#
+# async def download_coroutine(session, url):
+#     with async_timeout.timeout(10):
+#         async with session.get(url) as response:
+#             filename = os.path.basename(url)
+#             with open(filename, 'wb') as f_handle:
+#                 while True:
+#                     chunk = await response.content.read(1024)
+#                     if not chunk:
+#                         break
+#                     f_handle.write(chunk)
+#             return await response.release()
+#
+# async def main(loop):
+#     urls = ["http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+#         "http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+#         "http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+#         "http://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+#         "http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"]
+#
+#     async with aiohttp.ClientSession(loop=loop) as session:
+#         for url in urls:
+#             await download_coroutine(session, url)
+#
+# if __name__ == '__main__':
+#     loop = asyncio.get_event_loop()
+#     loop.run_until_complete(main(loop))
+
+
+# # multithreading
+# # multithreading is best for file I/O, using multiple cores is bad because of the GIL
+# # printing to stdout can be jumbled
+# import threading
+#
+# def doubler(number):
+#     """
+#     A function that can be used by a thread
+#     """
+#     print(threading.currentThread().getName() + '\n')
+#     print(number * 2)
+#     print()
+#
+# if __name__ == '__main__':
+#     for i in range(5):
+#         my_thread = threading.Thread(target=doubler, args=(i,))
+#         my_thread.start()
+
+
+# # using logging (which is thread safe)
+# import logging
+# import threading
+#
+# def get_logger():
+#     logger = logging.getLogger('threading_example')
+#     logger.setLevel(logging.DEBUG)
+#
+#     fh = logging.FileHandler('threading.log')
+#     fmt = '%(asctime)s - %(threadName)s - %(levelname)s - %(message)s'
+#     formatter = logging.Formatter(fmt)
+#     fh.setFormatter(formatter)
+#
+#     logger.addHandler(fh)
+#     return logger
+#
+# def doubler(number, logger): # pass the logger in, otherwise end up with lots of logging singletons
+#     """
+#     A function that can be used by a thread
+#     """
+#     logger.debug('doubler function executing')
+#     result = number * 2
+#     logger.debug('doubler function ended with: {result}'.format(result=result))
+#
+# if __name__ == '__main__':
+#     logger = get_logger()
+#     thread_names = ['Mike', 'George', 'Wanda', 'Dingbat', 'Nina']
+#     for i in range(5):
+#         my_thread = threading.Thread(
+#             target=doubler, name=thread_names[i], args=(i, logger))
+#         my_thread.start()
+
+# # subclassing threading.Thread
+# import logging
+# import threading
+#
+# class MyThread(threading.Thread):
+#
+#     def __init__(self, number, logger):
+#         threading.Thread.__init__(self)
+#         self.number = number
+#         self.logger = logger
+#
+#     def run(self):
+#         """
+#         Run the thread
+#         """
+#         logger.debug('Calling doubler')
+#         doubler(self.number, self.logger)
+#
+# def get_logger():
+#     logger = logging.getLogger('threading_example')
+#     logger.setLevel(logging.DEBUG)
+#
+#     fh = logging.FileHandler('threading_class.log')
+#     fmt = '%(asctime)s - %(threadName)s - %(levelname)s - %(message)s'
+#     formatter = logging.Formatter(fmt)
+#     fh.setFormatter(formatter)
+#
+#     logger.addHandler(fh)
+#     return logger
+#
+# def doubler(number, logger):
+#     """
+#     A function that can be used by a thread
+#     """
+#     logger.debug('doubler function executing')
+#     result = number * 2
+#     logger.debug('doubler function ended with: {}'.format(
+#         result))
+#
+# if __name__ == '__main__':
+#     logger = get_logger()
+#     thread_names = ['Mike', 'George', 'Wanda', 'Dingbat', 'Nina']
+#     for i in range(5):
+#         thread = MyThread(i, logger)
+#         thread.setName(thread_names[i])
+#         thread.start()
+
+# # adding a lock
+# import threading
+#
+# total = 0
+# lock = threading.Lock()
+#
+# def update_total(amount):
+#     """
+#     Updates the total by the given amount
+#     """
+#     global total
+#     lock.acquire()
+#     try:
+#         total += amount
+#     finally:
+#         lock.release()
+#         print(total)
+#
+# if __name__ == '__main__':
+#     for i in range(0, 10):
+#         my_thread = threading.Thread(
+#             target=update_total, args=(5,))
+#         my_thread.start()
+
+# # using a Timer
+# import subprocess
+# from threading import Timer
+#
+# kill = lambda process: process.kill()
+# cmd = ['ping', 'www.google.com']
+# ping = subprocess.Popen(
+#     cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+#
+# # waits 5 seconds before calling thread
+# my_timer = Timer(5, kill, [ping])
+#
+# try:
+#     my_timer.start()
+#     stdout, stderr = ping.communicate()
+# finally:
+#     my_timer.cancel()
+#
+# print(str(stdout))
+
+# # communication between threads
+# import threading
+# from queue import Queue
+#
+# def creator(data, q):
+#     """
+#     Creates data to be consumed and waits for the consumer
+#     to finish processing
+#     """
+#     print('Creating data and putting it on the queue')
+#     for item in data:
+#         evt = threading.Event()
+#         q.put((item, evt))
+#         print('Waiting for data to be doubled')
+#         evt.wait()
+#
+# def my_consumer(q):
+#     """
+#     Consumes some data and works on it
+#     In this case, all it does is double th input
+#     """
+#     while True:
+#         data, evt = q.get()
+#         print('data found to be processed: {}'.format(data))
+#         processed = data * 2
+#         print(processed)
+#         evt.set()
+#         q.task_done()
+#
+# if __name__ == '__main__':
+#     q = Queue()
+#     data = [5, 10, 13, -1]
+#     thread_one = threading.Thread(target=creator, args=(data, q))
+#     thread_two = threading.Thread(target=my_consumer, args=(q,))
+#     thread_one.start()
+#     thread_two.start()
+#
+#     q.join()
+
+# # spawning multiple processes to avoid the GIL (instead of threads)
+# # threads share memory, processes don't.
+# import os
+# from multiprocessing import Process
+#
+# def doubler(number):
+#     """
+#     A doubling function that can be used by a process
+#     """
+#     result = number * 2
+#     proc = os.getpid()
+#     print('{0} doubled to {1} by process id: {2}'.format(
+#         number, result, proc))
+#
+# if __name__ == '__main__':
+#     numbers = [5, 10, 15, 20, 25]
+#     procs = []
+#
+#     for index, number in enumerate(numbers):
+#         proc = Process(target=doubler, args=(number,)) # create a Process
+#         procs.append(proc)
+#         proc.start() # start the process
+#
+#     for proc in procs:
+#         proc.join() # wait for a process to terminate
+
+# # naming processes
+# import os
+# from multiprocessing import Process, current_process
+#
+# def doubler(number):
+#     """
+#     A doubling function that can be used by a process
+#     """
+#     result = number * 2
+#     proc_name = current_process().name
+#     print('{0} doubled to {1} by process id: {2}'.format(
+#         number, result, proc_name))
+#
+# if __name__ == '__main__':
+#     numbers = [5, 10, 15, 20, 25]
+#     procs = []
+#     proc = Process(target=doubler, args=(5,))
+#
+#     for index, number in enumerate(numbers):
+#         proc = Process(target=doubler, args=(number,)) # create a Process
+#         procs.append(proc)
+#         proc.start() # start the process
+#
+#     proc = Process(target=doubler, name='Test', args=(2,))
+#     proc.start()
+#     procs.append(proc)
+#
+#     for proc in procs:
+#         proc.join() # wait for a process to terminate
+
+# # using multiprocessing's Lock
+# from multiprocessing import Process, Lock
+#
+# def printer(item, lock):
+#     """
+#     Prints out the item that was passed in
+#     """
+#     lock.acquire() # next process waits for this lock to release
+#     try:
+#         print(item)
+#     finally:
+#         lock.release()
+#
+# if __name__ == '__main__':
+#     lock = Lock()
+#     items = ['tango', 'foxtrot', 10]
+#     for item in items:
+#         p = Process(target=printer, args=(item, lock))
+#         p.start()
+
+# # adding logging to multiprocessing
+# import logging
+# import multiprocessing
+# from multiprocessing import Process, Lock
+#
+# def printer(item, lock):
+#     """
+#     Prints out the item that was passed in
+#     """
+#     lock.acquire()
+#     try:
+#         print(item)
+#     finally:
+#         lock.release()
+#
+# if __name__ == '__main__':
+#     lock = Lock()
+#     items = ['tango', 'foxtrot', 10]
+#     multiprocessing.log_to_stderr()
+#     logger = multiprocessing.get_logger()
+#     logger.setLevel(logging.INFO)
+#     for item in items:
+#         p = multiprocessing.Process(target=printer, args=(item, lock))
+#         p.start()
+
+# # The Pool class represents a pool of worker processes
+# import multiprocessing
+#
+# def doubler(number):
+#     return number * 2
+#
+# if __name__ == '__main__':
+#     numbers = [5, 10, 20]
+#     pool = multiprocessing.Pool(processes=3) # create 3 worker processes
+#     print(pool.map(doubler, numbers)) # map a function and an iterable to each process
+
+# from multiprocessing import Pool
+#
+# def doubler(number):
+#     return number * 2
+#
+# if __name__ == '__main__':
+#     pool = Pool(processes=3)
+#     result = pool.apply_async(doubler, (25,))
+#     print(result.get(timeout=1)) # get the result
+
+# # communicating between processes with Queues and Pipes
+# import multiprocessing
+#
+# sentinel = -1
+#
+# def creator(data, q):
+#     """
+#     Creates data to be consumed and waits for the consumer
+#     to finish processing
+#     """
+#     print('Creating data and putting it on the queue')
+#     for item in data:
+#         q.put(item) # queue looks like [5, 10, 13, -1]
+#
+# def my_consumer(q):
+#     """
+#     Consumes some data and works on it
+#
+#     In this case, all it does is double the input
+#     """
+#     while True:
+#         data = q.get() # gets the first item from the queue
+#         print('data found to be processd: {}'.format(data))
+#         processed = data * 2
+#         print(processed)
+#
+#         if data is sentinel:
+#             break
+#
+# if __name__ == '__main__':
+#     q = multiprocessing.Queue()
+#     data = [5, 10, 13, -1] # without -1 (sentinel) at the end, process won't stop running
+#     process_one = multiprocessing.Process(target=creator, args=(data, q))
+#     process_two = multiprocessing.Process(target=my_consumer, args=(q,))
+#     process_one.start()
+#     process_two.start()
+#
+#     q.close() # prevent any more tasks being added
+#     q.join_thread()
+#
+#     process_one.join() # call join() on the processes rather than the Queue
+#     process_two.join()
+
+# # asynchronously executing callables (an abstraction layer on top of
+# #   threading and multiprocessing (removes flexibility)
+# # "future" means a pending result (describe the result of a process before it's finished)
+# import os
+# import urllib.request
+# from concurrent.futures import ThreadPoolExecutor
+# from concurrent.futures import as_completed
+#
+# def downloader(url):
+#     """
+#     Downloads the specified URL and saves it to disk
+#     """
+#     req = urllib.request.urlopen(url)
+#     filename = os.path.basename(url)
+#     ext = os.path.splitext(url)[1]
+#     if not ext:
+#         raise RuntimeError('URL does not contain an extension')
+#
+#     with open(filename, 'wb') as file_handle:
+#         while True:
+#             chunk =  req.read(1024)
+#             if not chunk:
+#                 break
+#             file_handle.write(chunk)
+#     msg = 'Finished downloading {filename}'.format(filename=filename)
+#     return msg
+#
+# def main(urls):
+#     """
+#     Create a thread pool and download specified urls
+#     """
+#     with ThreadPoolExecutor(max_workers=5) as executor: # instantiate the thread pool
+#         futures = [executor.submit(downloader, url) for url in urls]
+#         for future in as_completed(future): # as_completed yields futures as they finish/are cancelled
+#             print(future.result())
+#
+# if __name__ == '__main__':
+#     urls = ["http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+#         "http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+#         "http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+#         "http://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+#         "http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"]
+#     main(urls)
+
+# # deadlocks
+# # this code actually doesn't deadlock when tested, just doesn't print anything
+# from concurrent.futures import ThreadPoolExecutor
+#
+# def wait_forever():
+#     """
+#     This function will wait forever if there's only one thread assigned to the pool
+#     """
+#     my_future = executor.submit(zip, [1, 2, 3], [4, 5, 6])
+#     result = my_future.result()
+#     print(result)
+#
+# if __name__ == '___main__':
+#     executor = ThreadPoolExecutor(max_workers=1)
+#     executor.submit(wait_forever)
+
+# # avoiding deadlock
+# # This does output the zipped lists
+# from concurrent.futures import ThreadPoolExecutor
+#
+# def wait_forever():
+#     """
+#     This function will wait forever if there's only one thread assigned to the pool
+#     """
+#     my_future = executor.submit(zip, [1, 2, 3], [4, 5, 6])
+#
+#     return my_future
+#
+# if __name__ == '__main__':
+#     executor = ThreadPoolExecutor(max_workers=3)
+#     fut = executor.submit(wait_forever)
+#
+#     result = fut.result()
+#     print(list(result.result()))
