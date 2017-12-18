@@ -1,5 +1,6 @@
 # requires 'pip install youtube_dl'
 # requires 'sudo apt-get install ffmpeg'
+# converts video to mp3
 
 import youtube_dl
 
